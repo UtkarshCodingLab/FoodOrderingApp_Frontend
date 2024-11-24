@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { cartItemModel } from "../../Interfaces";
+import { cartItemModel, userModel } from "../../Interfaces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Storage/Redux/store";
 let logo = require("../../Assets/Images/Red_Jalapeno.png");
@@ -9,6 +9,8 @@ function Header() {
   const shoppingCartFromStore: cartItemModel[] = useSelector(
     (state: RootState) => state.shoppingCartStore.cartItems ?? [],
   );
+
+  const userData: userModel = useSelector((state: RootState) => state.userAuthStore);
   
   return (
     <div>
@@ -37,7 +39,7 @@ function Header() {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100">
               <li className="nav-item">
                 <NavLink className="nav-link" aria-current="page" to="/">
                   Home
@@ -81,6 +83,34 @@ function Header() {
                   </li>
                 </ul>
               </li>
+              <div className="d-flex" style={{marginLeft:"auto"}}>
+                {userData.id && (<><li className="nav-item">
+                  <button className="nav-link active"
+                  style={{
+                    cursor: "pointer",
+                    background: "transparent",
+                    border: 0,
+                  }}>
+                    Welcome, {userData.fullName}
+                  </button>
+                  </li>
+                  <li className="nav-item">
+                  <button className="btn btn-success btn-outlined rounded-pill text-white mx-2" style={{border: "none", height: "40px", width: "100px"}}>Logout</button>
+                </li>
+                </>)}
+                
+                {!userData.id && (<><li className="nav-item text-white">
+                  <NavLink className="nav-link" to="/register">
+                  Register
+                  </NavLink>
+                </li>
+                <li className="nav-item text-white">
+                  <NavLink className="btn btn-success btn-outlined rounded-pill text-white mx-2" style={{border:"none", height:"40px", width:"100px"}} to="/login">
+                  Login
+                  </NavLink>
+                </li></>)}
+                
+              </div>
             </ul>
           </div>
         </div>
